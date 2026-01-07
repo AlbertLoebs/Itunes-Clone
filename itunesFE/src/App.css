@@ -36,3 +36,23 @@ html, body {
   color: #888;
   margin-bottom: 30px;
 }
+
+/* Navbar style*/
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  padding: auto;
+  background-color: black;
+  color: white;
+}
+
+.navbar-links a{
+  color: white;
+  margin-left: 50px;
+  text-decoration: none;
+}
+
+.navbar-links a:hover {
+  text-decoration: underline;
+}
