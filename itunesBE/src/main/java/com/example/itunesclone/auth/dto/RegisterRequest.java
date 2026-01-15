@@ -1,4 +1,8 @@
 package com.example.itunesclone.auth.dto;
 
-public class RegisterRequest {
-}
+public record RegisterRequest (
+        String firstName,
+        String lastName,
+        String email,
+        String password
+){}
