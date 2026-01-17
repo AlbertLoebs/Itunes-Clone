@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.itunesclone.config.SecurityBeans;
 
+import java.util.Optional;
+
 @Service
 public class AuthService {
 
@@ -20,10 +22,10 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public AuthResponse register (RegisterRequest registerRequest){
+    public AuthResponse register (RegisterRequest registerRequest) {
         String email = registerRequest.email().toLowerCase().trim();
 
-        if (userRepository.existsByEmail(email)){
+        if (userRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("This email is already in use.");
         }
 
@@ -38,7 +40,28 @@ public class AuthService {
         return new AuthResponse(saved.getId(), saved.getEmail(), saved.getFirstName(), saved.getLastName());
     }
 
-    // to do
-    //public AuthResponse login (LoginRequest loginRequest){}
+    public AuthResponse login (LoginRequest loginRequest){
+
+        String email = loginRequest.email().toLowerCase().trim();
+
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if(user.isEmpty()){
+            throw new IllegalArgumentException("The email or password does not exist");
+        }
+
+        User newUser = user.get();
+
+        if (!passwordEncoder.matches(loginRequest.password(), newUser.getPasswordHash())){
+            throw new IllegalArgumentException("Invalid email or password");
+        }
+
+        return new AuthResponse(
+                newUser.getId(),
+                newUser.getEmail(),
+                newUser.getFirstName(),
+                newUser.getLastName()
+        );
+    }
 
 }
